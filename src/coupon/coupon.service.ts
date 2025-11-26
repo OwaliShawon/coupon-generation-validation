@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,12 +11,14 @@ import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { Coupon, CouponStatus, CouponType } from './entities/coupon.entity';
 import { RedeemCouponDto } from './dto/redeem-coupon.dto';
+import { ClientKafka } from '@nestjs/microservices';
 
 @Injectable()
 export class CouponService {
   constructor(
     @InjectRepository(Coupon)
     private readonly couponRepository: Repository<Coupon>,
+    @Inject('KAFKA_SERVICE') private readonly kafkaClient: ClientKafka,
   ) {}
 
   async create(createCouponDto: CreateCouponDto) {
@@ -118,9 +121,25 @@ export class CouponService {
 
     await this.couponRepository.save(coupon);
 
+    this.sendToLog(key, userId, true, null);
     return {
       success: true,
       message: 'Coupon redeemed successfully',
     };
+  }
+
+  private sendToLog(
+    code: string,
+    userId: number,
+    success: boolean,
+    error: string | null,
+  ) {
+    this.kafkaClient.emit('log_coupon_attempt', {
+      couponCode: code,
+      userId,
+      wasSuccessful: success,
+      errorMessage: error,
+      timestamp: new Date().toISOString(),
+    });
   }
 }
