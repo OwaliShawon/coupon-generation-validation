@@ -47,8 +47,6 @@ export class Coupon {
   @Column({ type: 'enum', enum: CouponStatus, default: CouponStatus.ACTIVE })
   status: CouponStatus;
 
-  // Postgres native array type
-  // Assuming User IDs are numbers. Change 'int' to 'text' if User IDs are UUIDs.
   @Column('int', { array: true, default: [] })
   usedBy: number[];
 

@@ -10,6 +10,7 @@ import {
 import { CouponService } from './coupon.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
+import { RedeemCouponDto } from './dto/redeem-coupon.dto';
 
 @Controller('coupon')
 export class CouponController {
@@ -18,6 +19,11 @@ export class CouponController {
   @Post()
   create(@Body() createCouponDto: CreateCouponDto) {
     return this.couponService.create(createCouponDto);
+  }
+
+  @Post('redeem')
+  redeem(@Body() redeemCouponDto: RedeemCouponDto) {
+    return this.couponService.redeem(redeemCouponDto);
   }
 
   @Get()
