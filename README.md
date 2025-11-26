@@ -62,6 +62,16 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+#APIs
+```
+GET http://localhost:3000/coupon
+POST http://localhost:3000/coupon // dto for body
+POST http://localhost:3000/coupon/redeem // dto for body
+GET http://localhost:3000/coupon/{{id}}
+PATCH http://localhost:3000/coupon/{{id}}
+DELETE http://localhost:3000/coupon/{id}
+```
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
