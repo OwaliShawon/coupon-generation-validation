@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CouponModule } from './coupon/coupon.module';
+import { Coupon } from './coupon/entities/coupon.entity';
 
 @Module({
   imports: [
@@ -19,10 +21,11 @@ import { AppService } from './app.service';
         username: configService.get<string>('DB_USER'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [__dirname + '/**/*.entity{.ts}'],
+        entities: [Coupon],
         synchronize: true,
       }),
     }),
+    CouponModule,
   ],
   controllers: [AppController],
   providers: [AppService],
